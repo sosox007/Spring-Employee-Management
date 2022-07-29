@@ -1,28 +1,24 @@
 package com.giantlink.grh.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "Project")
+@Table(name = "tbl_project")
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Project {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ProjectId", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @JsonManagedReference    
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "project")
+    @OneToMany(mappedBy = "project",fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Job> jobs;
-
 }

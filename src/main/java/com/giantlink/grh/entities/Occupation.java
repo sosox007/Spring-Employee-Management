@@ -1,40 +1,38 @@
 package com.giantlink.grh.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.springframework.format.annotation.DateTimeFormat;
-import java.util.Date;
+import java.sql.Date;
 
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "Occupation")
+@Table(name = "tbl_occupation")
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Occupation {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "OccupationId", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
-    @Column(name = "dateOccupation")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateOccupation;
+    private boolean isCurrent;
 
-    @JsonBackReference
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	@JoinColumn(name = "employee_id", nullable = false)
-	private Employee employee;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "employee_id")
+    @JsonBackReference(value = "employee-occupation")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Employee employee;
 
-    @JsonBackReference
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	@JoinColumn(name = "job_id", nullable = false)
-	private Job job;
-
-    private Boolean isCurrent;
+    @ManyToOne (fetch = FetchType.EAGER)
+    @JoinColumn(name = "job_id")
+    @JsonBackReference(value = "job-occupation")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Job job;
 }

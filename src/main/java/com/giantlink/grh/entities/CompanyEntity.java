@@ -2,7 +2,6 @@ package com.giantlink.grh.entities;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -30,17 +32,18 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class CompanyEntity {
-	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+	private String name;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "company_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonBackReference
 	private Company company;
 
-	@JsonManagedReference  
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "companyEntity", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "companyEntity", fetch = FetchType.EAGER)
+	@JsonManagedReference
 	private List<Departement> departements;
 }

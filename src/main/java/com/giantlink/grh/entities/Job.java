@@ -1,34 +1,33 @@
 package com.giantlink.grh.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import javax.persistence.*;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "Job")
+@Table(name = "tbl_job")
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Job {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "JobId", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @JsonManagedReference
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "job")
+    @OneToMany(mappedBy = "job", fetch = FetchType.EAGER)
+    @JsonManagedReference(value = "job-occupation")
     private List<Occupation> occupations;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "project_id")
     @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "project_id", nullable = false)
-    Project project;
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Project project;
 }

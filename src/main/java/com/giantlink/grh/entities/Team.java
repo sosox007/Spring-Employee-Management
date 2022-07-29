@@ -1,38 +1,33 @@
 package com.giantlink.grh.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import javax.persistence.*;
+import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "Team")
+@Table(name = "tbl_team")
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Team {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "TeamId", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "departement_id")
     @JsonBackReference
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	@JoinColumn(name = "departement_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-	private Departement departement;
+    private Departement departement;
 
+    @OneToMany(mappedBy = "team",fetch = FetchType.EAGER)
     @JsonManagedReference
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "team", fetch = FetchType.EAGER)
     private List<Employee> employees;
-
 }
