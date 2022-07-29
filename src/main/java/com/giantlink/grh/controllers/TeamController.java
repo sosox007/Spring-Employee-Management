@@ -5,60 +5,52 @@ import com.giantlink.grh.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
-
 @RestController
-@RequestMapping("teams")
+@RequestMapping("/api/v1/company/team")
 public class TeamController {
 
     @Autowired
     private TeamService teamService;
    
-    @GetMapping("")
-    public ResponseEntity<List<Team>> findAll() {
-         try {
-            List<Team> teams =  teamService.findAll();
-            if (teams.isEmpty()) 
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            return new ResponseEntity<>(teams, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @GetMapping
+	public ResponseEntity<List<Team>> get() {
+		return new ResponseEntity<List<Team>>(teamService.get(), HttpStatus.OK);
+	}
+
+	@PostMapping
+	public ResponseEntity<Team> add(@RequestBody Team team) {
+		return new ResponseEntity<Team>(teamService.add(team), HttpStatus.CREATED);
+	}
+
+	@GetMapping("/{id}")
+    public ResponseEntity<Team> get(@PathVariable Integer id) {
+        return new ResponseEntity<Team>(teamService.get(id), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Team> getTeamById(@PathVariable Long id) {
-        Team team = teamService.findById(id);
-        if (team != null )
-            return new ResponseEntity<>(team, HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PostMapping("/save")
-    public ResponseEntity<Team> save(@RequestBody Team team) {
-        return new ResponseEntity<>(teamService.save(team),HttpStatus.CREATED);
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Team> update(@PathVariable Long id,@RequestBody Team te) {
-        Team team = teamService.findById(id);
+    @PutMapping("/{id}")
+    public ResponseEntity<Team> update(@PathVariable Integer id,@RequestBody Team te) {
+        Team team = teamService.get(id);
         if (team != null) {
-            te.setId(id);
-            return new ResponseEntity<>(teamService.save(te), HttpStatus.OK);
+        	te.setId(id);
+            return new ResponseEntity<Team>(teamService.add(te), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable Long id) {
-        try {
-            teamService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
+    	teamService.delete(id);
+        return new ResponseEntity<String>("Team deleted",HttpStatus.OK);
     }
+
 }

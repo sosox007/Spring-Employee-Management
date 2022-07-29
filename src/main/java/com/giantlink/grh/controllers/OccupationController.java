@@ -5,61 +5,53 @@ import com.giantlink.grh.services.OccupationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-
 @RestController
-@RequestMapping("occupations")
+@RequestMapping("/api/v1/company/occupation")
 public class OccupationController {
 
     @Autowired
     private OccupationService occupationService;
 
-    @GetMapping("")
-    public ResponseEntity<List<Occupation>> findAll() {
-         try {
-            List<Occupation> occupations =  occupationService.findAll();
-            if (occupations.isEmpty()) 
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            return new ResponseEntity<>(occupations, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @GetMapping
+	public ResponseEntity<List<Occupation>> get() {
+		return new ResponseEntity<List<Occupation>>(occupationService.get(), HttpStatus.OK);
+	}
+
+	@PostMapping
+	public ResponseEntity<Occupation> add(@RequestBody Occupation occupation) {
+		return new ResponseEntity<Occupation>(occupationService.add(occupation), HttpStatus.CREATED);
+	}
+
+	@GetMapping("/{id}")
+    public ResponseEntity<Occupation> get(@PathVariable Integer id) {
+        return new ResponseEntity<Occupation>(occupationService.get(id), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Occupation> getOccupationById(@PathVariable Long id) {
-        Occupation occupation = occupationService.findById(id);
-        if (occupation != null )
-            return new ResponseEntity<>(occupation, HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PostMapping("/save")
-    public ResponseEntity<Occupation> save(@RequestBody Occupation occupation) {
-        return new ResponseEntity<>(occupationService.save(occupation),HttpStatus.CREATED);
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Occupation> update(@PathVariable Long id,@RequestBody Occupation occup) {
-        Occupation occupation = occupationService.findById(id);
+    @PutMapping("/{id}")
+    public ResponseEntity<Occupation> update(@PathVariable Integer id,@RequestBody Occupation occup) {
+        Occupation occupation = occupationService.get(id);
         if (occupation != null) {
-            occup.setId(id);
-            return new ResponseEntity<>(occupationService.save(occup), HttpStatus.OK);
+        	occup.setId(id);
+            return new ResponseEntity<Occupation>(occupationService.add(occup), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable Long id) {
-        try {
-            occupationService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
+    	occupationService.delete(id);
+        return new ResponseEntity<String>("Occupation deleted",HttpStatus.OK);
     }
 
 }

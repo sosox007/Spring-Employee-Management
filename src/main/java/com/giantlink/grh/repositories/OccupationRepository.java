@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.giantlink.grh.entities.Occupation;
 
 @Repository
-public interface OccupationRepository extends JpaRepository<Occupation, Long>{
+public interface OccupationRepository extends JpaRepository<Occupation, Integer>{
 }

@@ -5,10 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
+
 
 @Data
 @AllArgsConstructor
@@ -20,10 +19,10 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ProjectId", nullable = false)
-    private Long id;
+    private Integer id;
 
-    @OneToMany(mappedBy = "project",cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonManagedReference    
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "project")
     private List<Job> jobs;
 
 }

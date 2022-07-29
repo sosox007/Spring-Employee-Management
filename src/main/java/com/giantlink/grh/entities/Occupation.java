@@ -5,10 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
+
 
 @Data
 @AllArgsConstructor
@@ -20,15 +20,21 @@ public class Occupation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "OccupationId", nullable = false)
-    private Long id;
+    private Integer id;
 
     @Column(name = "dateOccupation")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOccupation;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "job_id", nullable = false)
-    private Job  job ;
+    @JsonBackReference
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JoinColumn(name = "employee_id", nullable = false)
+	private Employee employee;
+
+    @JsonBackReference
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JoinColumn(name = "job_id", nullable = false)
+	private Job job;
 
     private Boolean isCurrent;
 }

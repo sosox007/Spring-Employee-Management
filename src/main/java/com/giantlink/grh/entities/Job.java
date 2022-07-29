@@ -6,7 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -20,18 +21,14 @@ public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "JobId", nullable = false)
-    private Long id;
+    private Integer id;
 
-    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "job")
     private List<Occupation> occupations;
 
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id", nullable = false)
     Project project;
-
-    /*@OneToMany(mappedBy = "job", fetch = FetchType.EAGER)
-    @JsonManagedReference(value = "job-occupation")
-    private List<Occupation> occupations;*/
-
 }

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.giantlink.grh.entities.Team;
 
 @Repository
-public interface TeamRepository extends JpaRepository<Team, Long>{
+public interface TeamRepository extends JpaRepository<Team, Integer>{
 }

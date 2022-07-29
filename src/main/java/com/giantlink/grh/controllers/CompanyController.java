@@ -1,64 +1,58 @@
 package com.giantlink.grh.controllers;
 
+import java.util.List;
 
-import com.giantlink.grh.entities.Company;
-import com.giantlink.grh.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.giantlink.grh.entities.Company;
+import com.giantlink.grh.services.CompanyService;
 
 @RestController
-@RequestMapping("companies")
+@RequestMapping("/api/v1/company")
 public class CompanyController {
 
 	@Autowired
-    private CompanyService companyService;
+	CompanyService companyService;
 
-    @GetMapping("")
-    public ResponseEntity<List<Company>> findAll() {
-         try {
-            List<Company> companies =  companyService.findAll();
-            if (companies.isEmpty()) 
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            return new ResponseEntity<>(companies, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+	@GetMapping
+	public ResponseEntity<List<Company>> get() {
+		return new ResponseEntity<List<Company>>(companyService.get(), HttpStatus.OK);
+	}
+
+	@PostMapping
+	public ResponseEntity<Company> add(@RequestBody Company company) {
+		return new ResponseEntity<Company>(companyService.add(company), HttpStatus.CREATED);
+	}
+
+	@GetMapping("/{id}")
+    public ResponseEntity<Company> get(@PathVariable Integer id) {
+        return new ResponseEntity<Company>(companyService.get(id), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
-        Company company = companyService.findById(id);
-        if (company != null )
-            return new ResponseEntity<>(company, HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PostMapping("/save")
-    public ResponseEntity<Company> save(@RequestBody Company company) {
-        return new ResponseEntity<>(companyService.save(company),HttpStatus.CREATED);
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Company> update(@PathVariable Long id,@RequestBody Company comp) {
-        Company company = companyService.findById(id);
+    @PutMapping("/{id}")
+    public ResponseEntity<Company> update(@PathVariable Integer id,@RequestBody Company comp) {
+        Company company = companyService.get(id);
         if (company != null) {
             comp.setId(id);
-            return new ResponseEntity<>(companyService.save(comp), HttpStatus.OK);
+            return new ResponseEntity<Company>(companyService.add(comp), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable Long id) {
-        try {
-            companyService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
+    	companyService.delete(id);
+        return new ResponseEntity<String>("Company deleted",HttpStatus.OK);
     }
+
 }

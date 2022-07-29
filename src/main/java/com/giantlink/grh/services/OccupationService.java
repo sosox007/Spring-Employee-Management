@@ -4,10 +4,11 @@ import com.giantlink.grh.entities.Occupation;
 
 import java.util.List;
 
+
 public interface OccupationService {
 
-    List<Occupation> findAll();
-    Occupation findById(Long id);
-    Occupation save(Occupation occupation);
-    void delete(Long occupationId);
+    Occupation add(Occupation occupation);
+	Occupation get(Integer id);
+    List<Occupation> get();
+    void delete(Integer id);
 }

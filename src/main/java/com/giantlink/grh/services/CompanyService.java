@@ -1,14 +1,14 @@
 package com.giantlink.grh.services;
 
-import com.giantlink.grh.entities.Company;
-
 import java.util.List;
+
+import com.giantlink.grh.entities.Company;
 
 public interface CompanyService {
 
-    List<Company> findAll();
-    Company findById(Long id);
-    Company save(Company company);
-    void delete(Long companyId);
-
+	Company add(Company company);
+	Company get(Integer id);
+	List<Company> get();
+    void delete(Integer id);
+	
 }

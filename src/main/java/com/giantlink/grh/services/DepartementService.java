@@ -1,14 +1,16 @@
 package com.giantlink.grh.services;
 
-import com.giantlink.grh.entities.Departement;
-
 import java.util.List;
+import java.util.Optional;
+
+import com.giantlink.grh.entities.Departement;
 
 public interface DepartementService {
 
-    List<Departement> findAll();
-    Departement findById(Long id);
-    Departement save(Departement departement);
-    void delete(Long departementId);
-
+	Departement add(Departement departement);
+	Departement get(Integer id);
+	Optional<Departement> get(String name);
+	List<Departement> get();
+	void delete(Integer id);
+	
 }

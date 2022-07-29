@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.giantlink.grh.entities.CompanyEntity;
 
 @Repository
-public interface CompanyEntityRepository extends JpaRepository<CompanyEntity, Long>{
+public interface CompanyEntityRepository extends JpaRepository<CompanyEntity, Integer> {
+
 }
