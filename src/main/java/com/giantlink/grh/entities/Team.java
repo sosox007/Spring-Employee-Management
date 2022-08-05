@@ -3,12 +3,10 @@ package com.giantlink.grh.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-
-import javax.persistence.*;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -19,20 +17,17 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Team {
-	
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String name;
+	private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "departement_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference(value = "departement-team")
+    @JsonBackReference
     private Departement departement;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "team",fetch = FetchType.EAGER)
-    @JsonManagedReference(value = "team-employee")
+    @JsonManagedReference
     private List<Employee> employees;
-    
 }

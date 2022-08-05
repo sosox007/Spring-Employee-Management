@@ -14,14 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Project {
-	
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String name;
-
+	private String name;
+	
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "project",fetch = FetchType.EAGER)
-    @JsonManagedReference(value = "job-project")
+    @JsonManagedReference
     private List<Job> jobs;
-    
 }

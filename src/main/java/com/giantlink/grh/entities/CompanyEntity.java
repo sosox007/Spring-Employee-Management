@@ -33,7 +33,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class CompanyEntity {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
@@ -41,10 +40,10 @@ public class CompanyEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "company_id", nullable = false)
-	@JsonBackReference(value = "company-entity")
+	@JsonBackReference
 	private Company company;
 
 	@OneToMany(cascade = CascadeType.ALL,mappedBy = "companyEntity", fetch = FetchType.EAGER)
-	@JsonManagedReference(value = "entity-departement")
+	@JsonManagedReference
 	private List<Departement> departements;
 }

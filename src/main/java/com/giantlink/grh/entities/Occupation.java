@@ -3,12 +3,10 @@ package com.giantlink.grh.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-
-import javax.persistence.*;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
@@ -19,24 +17,22 @@ import java.sql.Date;
 @AllArgsConstructor
 @Builder
 public class Occupation {
-	
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String name;
-    
+	private String name;
+	
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateOccupation;
     private boolean isCurrent;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
     @JsonBackReference(value = "employee-occupation")
     private Employee employee;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "job_id")
     @JsonBackReference(value = "job-occupation")
     private Job job;
-    
 }
