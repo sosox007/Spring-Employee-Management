@@ -1,6 +1,9 @@
 package com.giantlink.grh.controllers;
 
-import com.giantlink.grh.entities.Team;
+import com.giantlink.grh.exceptions.AlreadyExistsException;
+import com.giantlink.grh.exceptions.ResourceNotFoundException;
+import com.giantlink.grh.models.requests.TeamRequest;
+import com.giantlink.grh.models.responses.TeamResponse;
 import com.giantlink.grh.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,7 +12,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,32 +25,27 @@ public class TeamController {
     private TeamService teamService;
    
     @GetMapping
-	public ResponseEntity<List<Team>> get() {
-		return new ResponseEntity<List<Team>>(teamService.get(), HttpStatus.OK);
+	public ResponseEntity<List<TeamResponse>> get() {
+		return new ResponseEntity<>(teamService.get(), HttpStatus.OK);
 	}
 
 	@PostMapping
-	public ResponseEntity<Team> add(@RequestBody Team team) {
-		return new ResponseEntity<Team>(teamService.add(team), HttpStatus.CREATED);
+	public ResponseEntity<TeamResponse> add(@RequestBody TeamRequest teamRequest) throws AlreadyExistsException {
+		return new ResponseEntity<>(teamService.add(teamRequest), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{id}")
-    public ResponseEntity<Team> get(@PathVariable Integer id) {
-        return new ResponseEntity<Team>(teamService.get(id), HttpStatus.OK);
+    public ResponseEntity<TeamResponse> get(@PathVariable Integer id) throws ResourceNotFoundException {
+        return new ResponseEntity<>(teamService.get(id), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Team> update(@PathVariable Integer id,@RequestBody Team te) {
-        Team team = teamService.get(id);
-        if (team != null) {
-        	te.setId(id);
-            return new ResponseEntity<Team>(teamService.add(te), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	@GetMapping("/name/{name}")
+    public ResponseEntity<TeamResponse> get(@PathVariable String name) throws ResourceNotFoundException {
+        return new ResponseEntity<>(teamService.get(name), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) {
+    public ResponseEntity<String> delete(@PathVariable Integer id) throws ResourceNotFoundException {
     	teamService.delete(id);
         return new ResponseEntity<String>("Team deleted",HttpStatus.OK);
     }

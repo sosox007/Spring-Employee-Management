@@ -1,6 +1,9 @@
 package com.giantlink.grh.controllers;
 
-import com.giantlink.grh.entities.Job;
+import com.giantlink.grh.exceptions.AlreadyExistsException;
+import com.giantlink.grh.exceptions.ResourceNotFoundException;
+import com.giantlink.grh.models.requests.JobRequest;
+import com.giantlink.grh.models.responses.JobResponse;
 import com.giantlink.grh.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,7 +12,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,34 +26,29 @@ public class JobController {
     private JobService jobService;
 
     @GetMapping
-	public ResponseEntity<List<Job>> get() {
-		return new ResponseEntity<List<Job>>(jobService.get(), HttpStatus.OK);
+	public ResponseEntity<List<JobResponse>> get() {
+		return new ResponseEntity<>(jobService.get(), HttpStatus.OK);
 	}
 
 	@PostMapping
-	public ResponseEntity<Job> add(@RequestBody Job job) {
-		return new ResponseEntity<Job>(jobService.add(job), HttpStatus.CREATED);
+	public ResponseEntity<JobResponse> add(@RequestBody JobRequest jobRequest) throws AlreadyExistsException {
+		return new ResponseEntity<>(jobService.add(jobRequest), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{id}")
-    public ResponseEntity<Job> get(@PathVariable Integer id) {
-        return new ResponseEntity<Job>(jobService.get(id), HttpStatus.OK);
+    public ResponseEntity<JobResponse> get(@PathVariable Integer id) throws ResourceNotFoundException {
+        return new ResponseEntity<>(jobService.get(id), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Job> update(@PathVariable Integer id,@RequestBody Job jo) {
-        Job job = jobService.get(id);
-        if (job != null) {
-        	jo.setId(id);
-            return new ResponseEntity<Job>(jobService.add(jo), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	@GetMapping("/name/{name}")
+    public ResponseEntity<JobResponse> get(@PathVariable String name) throws ResourceNotFoundException {
+        return new ResponseEntity<>(jobService.get(name), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) {
+    public ResponseEntity<String> delete(@PathVariable Integer id) throws ResourceNotFoundException {
     	jobService.delete(id);
-        return new ResponseEntity<String>("Job deleted",HttpStatus.OK);
+        return new ResponseEntity<>("Job deleted",HttpStatus.OK);
     }
 
 }

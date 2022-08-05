@@ -1,14 +1,17 @@
 package com.giantlink.grh.services;
-
-import com.giantlink.grh.entities.Project;
+import com.giantlink.grh.models.requests.ProjectRequest;
+import com.giantlink.grh.models.responses.ProjectResponse;
+import com.giantlink.grh.exceptions.AlreadyExistsException;
+import com.giantlink.grh.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 
 
 public interface ProjectService {
 
-    Project add(Project project);
-	Project get(Integer id);
-	List<Project> get();
-    void delete(Integer id);
+	ProjectResponse add(ProjectRequest ProjectRequest) throws AlreadyExistsException;
+	ProjectResponse get(Integer id) throws ResourceNotFoundException;
+	ProjectResponse get(String name) throws ResourceNotFoundException;
+	List<ProjectResponse> get();
+    void delete(Integer id) throws ResourceNotFoundException;
 }

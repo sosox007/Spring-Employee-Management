@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -21,12 +24,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Departement {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	private String name;
+	
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference(value = "entity-departement")
 	@JoinColumn(name = "entity_id", nullable = false)
 	private CompanyEntity companyEntity;
 
@@ -34,8 +39,8 @@ public class Departement {
 	@Column(nullable = false)
 	private Date timestamp;
 
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "departement")
-	@JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "departement")
+	@JsonManagedReference(value = "departement-team")
 	private List<Team> teams;
 
 	@PrePersist

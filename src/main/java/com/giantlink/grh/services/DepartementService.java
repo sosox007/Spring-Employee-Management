@@ -1,16 +1,18 @@
 package com.giantlink.grh.services;
 
 import java.util.List;
-import java.util.Optional;
 
-import com.giantlink.grh.entities.Departement;
+import com.giantlink.grh.models.requests.DepartementRequest;
+import com.giantlink.grh.models.responses.DepartementResponse;
+import com.giantlink.grh.exceptions.AlreadyExistsException;
+import com.giantlink.grh.exceptions.ResourceNotFoundException;
 
 public interface DepartementService {
 
-	Departement add(Departement departement);
-	Departement get(Integer id);
-	Optional<Departement> get(String name);
-	List<Departement> get();
-	void delete(Integer id);
+	DepartementResponse add(DepartementRequest DepartementRequest) throws AlreadyExistsException;
+	DepartementResponse get(Integer id) throws ResourceNotFoundException;
+	DepartementResponse get(String name) throws ResourceNotFoundException;
+	List<DepartementResponse> get();
+	void delete(Integer id) throws ResourceNotFoundException;
 	
 }

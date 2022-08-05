@@ -1,8 +1,9 @@
 package com.giantlink.grh.entities;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.*;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Company {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
@@ -26,7 +28,7 @@ public class Company {
 	private String email;
 	private String address;
 
-	@JsonManagedReference
-	@OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
-	private Set<CompanyEntity> entities;
+	@JsonManagedReference(value = "company-entity")
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "company", fetch = FetchType.EAGER)
+	private List<CompanyEntity> entities;
 }

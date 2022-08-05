@@ -2,6 +2,7 @@ package com.giantlink.grh.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -32,6 +33,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class CompanyEntity {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
@@ -39,11 +41,10 @@ public class CompanyEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "company_id", nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JsonBackReference
+	@JsonBackReference(value = "company-entity")
 	private Company company;
 
-	@OneToMany(mappedBy = "companyEntity", fetch = FetchType.EAGER)
-	@JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "companyEntity", fetch = FetchType.EAGER)
+	@JsonManagedReference(value = "entity-departement")
 	private List<Departement> departements;
 }
