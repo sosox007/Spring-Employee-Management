@@ -20,49 +20,49 @@ public class DepartementServiceImpl implements DepartementService {
 
 	@Autowired
 	private DepartementRepository departementRepository;
-	
+
 	@Override
 	public DepartementResponse add(DepartementRequest departementRequest) throws AlreadyExistsException {
-		
-		Departement departement =  DepartementMapper.INSTANCE.DepartementRequestToDepartement(departementRequest);
+
+		Departement departement = DepartementMapper.INSTANCE.DepartementRequestToDepartement(departementRequest);
 		if (departementRepository.findByName(departement.getName()).isPresent())
-			throw new AlreadyExistsException(Departement.class.getSimpleName(), departementRequest.getName() + " Already Exists !");	
-		
-		return  DepartementMapper.INSTANCE.DepartementToDepartementResponse(departementRepository.save(departement));
+			throw new AlreadyExistsException(Departement.class.getSimpleName(),
+					departementRequest.getName() + " Already Exists !");
+
+		return DepartementMapper.INSTANCE.DepartementToDepartementResponse(departementRepository.save(departement));
 	}
-	
 
 	@Override
 	public List<DepartementResponse> get() {
 		return DepartementMapper.INSTANCE.mapReponse(departementRepository.findAll());
 	}
-	
+
 	@Override
 	public DepartementResponse get(Integer id) throws ResourceNotFoundException {
-		
+
 		Optional<Departement> departement = departementRepository.findById(id);
-		if(!departement.isPresent())
-		    throw new ResourceNotFoundException("Departement not found with id :" + id);
-		
-		return  DepartementMapper.INSTANCE.DepartementToDepartementResponse(departement.get());	
+		if (!departement.isPresent())
+			throw new ResourceNotFoundException("Departement not found with id :" + id);
+
+		return DepartementMapper.INSTANCE.DepartementToDepartementResponse(departement.get());
 	}
-	
+
 	@Override
 	public DepartementResponse get(String name) throws ResourceNotFoundException {
 		Optional<Departement> departement = departementRepository.findByName(name);
-		if(!departement.isPresent())
-		    throw new ResourceNotFoundException("Departement not found with name :" + name);
-		
-		return  DepartementMapper.INSTANCE.DepartementToDepartementResponse(departement.get());	
+		if (!departement.isPresent())
+			throw new ResourceNotFoundException("Departement not found with name :" + name);
+
+		return DepartementMapper.INSTANCE.DepartementToDepartementResponse(departement.get());
 	}
-	
+
 	@Override
-    public void delete(Integer id) throws ResourceNotFoundException {
-		
-		Departement departement = departementRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Departement not found"));
-		
-		departement.getCompanyEntity().getDepartements().remove(departement);
-    	departementRepository.delete(departement);
-    }
+	public void delete(Integer id) throws ResourceNotFoundException {
+
+		Departement departement = departementRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Departement not found"));
+
+		departementRepository.delete(departement);
+	}
 
 }

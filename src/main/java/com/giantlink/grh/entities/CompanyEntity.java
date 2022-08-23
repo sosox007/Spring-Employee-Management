@@ -13,14 +13,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,7 +29,6 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class CompanyEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,11 +36,12 @@ public class CompanyEntity {
 	private String name;
 
 	@ManyToOne
-	@JoinColumn(name = "company_id", nullable = false)
+	@JoinColumn(name = "company_id")
 	@JsonBackReference
 	private Company company;
+	
 
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "companyEntity", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "companyEntity", fetch = FetchType.LAZY)
 	@JsonManagedReference
 	private List<Departement> departements;
 }

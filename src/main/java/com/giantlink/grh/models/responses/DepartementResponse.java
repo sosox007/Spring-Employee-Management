@@ -12,11 +12,11 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
 public class DepartementResponse {
 
     private Integer id;
     private String name;
-    public Set<TeamResponse> teams;
+    private CompanyEntityResponse companyEntity;
+    //public Set<TeamResponse> teams;
 }

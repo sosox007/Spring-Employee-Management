@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import com.giantlink.grh.services.CompanyEntityService;
 
 @RestController
 @RequestMapping("/api/v1/company/entity")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CompanyEntityController {
 
 	@Autowired
@@ -47,7 +49,7 @@ public class CompanyEntityController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id) throws ResourceNotFoundException {
     	companyEntityService.delete(id);
-        return new ResponseEntity<>("companyEntity deleted",HttpStatus.OK);
+        return new ResponseEntity<>("companyEntity deleted",HttpStatus.NO_CONTENT);
     }
 
 }
