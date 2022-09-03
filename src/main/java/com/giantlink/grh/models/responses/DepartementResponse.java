@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Set;
 
+import com.giantlink.grh.entities.CompanyEntity;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -17,6 +19,9 @@ public class DepartementResponse {
 
     private Integer id;
     private String name;
-    private CompanyEntityResponse companyEntity;
+    
+    //Hadi t9der dir lik chi erreur ta hia hyd Response
+    private CompanyEntity companyEntity;
+    
     //public Set<TeamResponse> teams;
 }

@@ -21,7 +21,11 @@ public class CompanyEntityRequest {
 	@Size(min = 3, max = 20)
 	private String name;
 	
+	//Hadi makantch commentaire ila tra chi mochkil rdha ta hia
 	@NotNull
-	private Company company;
+	private Integer company_id;
+	
+	//Hadi makantch commentaire ila tra chi mochkil rdha ta hia
+	//private Company company;
 
 }

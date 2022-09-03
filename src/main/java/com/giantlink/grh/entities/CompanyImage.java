@@ -11,6 +11,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,5 +42,6 @@ public class CompanyImage {
 
 	@ManyToOne
 	@JoinColumn(name = "company_id")
+	@JsonBackReference
 	private Company company;
 }
